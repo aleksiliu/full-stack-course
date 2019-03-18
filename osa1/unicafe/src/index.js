@@ -6,13 +6,25 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const handleGood = value => {
+    setGood(value + 1);
+  };
+
+  const handleNeutral = value => {
+    setNeutral(value + 1);
+  };
+
+  const handleBad = value => {
+    setBad(value + 1);
+  };
+
   return (
     <>
       <div>
         <h1>Anna palauetta</h1>
-        <button onClick={() => setGood(good + 1)}>Hyvä</button>
-        <button onClick={() => setNeutral(neutral + 1)}>Neutraali</button>
-        <button onClick={() => setBad(bad + 1)}>Huono</button>
+        <button onClick={() => handleGood(good)}>Hyvä</button>
+        <button onClick={() => handleNeutral(neutral)}>Neutraali</button>
+        <button onClick={() => handleBad(bad)}>Huono</button>
       </div>
       <div>
         <h2>Statistiikka</h2>
