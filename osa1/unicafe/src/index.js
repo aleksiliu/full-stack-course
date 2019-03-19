@@ -8,14 +8,25 @@ const Statistics = ({ good, neutral, bad, calcAverage, calcPercentage }) => {
 
   return (
     <div>
-      <h2>Statistiikka</h2>
-      <p>Hyvä {good}</p>
-      <p>Neutraali {neutral}</p>
-      <p>Huono {bad}</p>
-      <p>Yhteensä {good + neutral + bad}</p>
-      <p>Keskiarvo {calcAverage()}</p>
-      <p>Positiivisia {calcPercentage() || 0}%</p>
+      <Statistic value={good}>Hyvä </Statistic>
+      <Statistic value={neutral}>Neutraali </Statistic>
+      <Statistic value={bad}>Huono </Statistic>
+      <Statistic value={good + neutral + bad}>Yhteensä </Statistic>
+      <Statistic value={calcAverage()}>Keskiarvo</Statistic>
+      <Statistic value={`${calcPercentage() || 0} %`}>Positiivisia</Statistic>
     </div>
+  );
+};
+
+const Button = ({ children, onPress }) => {
+  return <button onClick={onPress}>{children}</button>;
+};
+
+const Statistic = ({ children, value }) => {
+  return (
+    <p>
+      {children} {value}
+    </p>
   );
 };
 
@@ -53,11 +64,12 @@ const App = () => {
     <>
       <div>
         <h1>Anna palauetta</h1>
-        <button onClick={() => handleGood(good)}>Hyvä</button>
-        <button onClick={() => handleNeutral(neutral)}>Neutraali</button>
-        <button onClick={() => handleBad(bad)}>Huono</button>
+        <Button onPress={() => handleGood(good)}>Hyvä</Button>
+        <Button onPress={() => handleNeutral(neutral)}>Neutraali</Button>
+        <Button onPress={() => handleBad(bad)}>Huono</Button>
       </div>
       <div>
+        <h2>Statistiikka</h2>
         <Statistics
           good={good}
           neutral={neutral}
