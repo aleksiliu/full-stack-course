@@ -1,6 +1,24 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+const Statistics = ({ good, neutral, bad, calcAverage, calcPercentage }) => {
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return <p>Ei yhtään palautetta annettu</p>;
+  }
+
+  return (
+    <div>
+      <h2>Statistiikka</h2>
+      <p>Hyvä {good}</p>
+      <p>Neutraali {neutral}</p>
+      <p>Huono {bad}</p>
+      <p>Yhteensä {good + neutral + bad}</p>
+      <p>Keskiarvo {calcAverage()}</p>
+      <p>Positiivisia {calcPercentage() || 0}%</p>
+    </div>
+  );
+};
+
 const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -18,6 +36,19 @@ const App = () => {
     setBad(value + 1);
   };
 
+  const calcPercentage = () => {
+    const calcGoodPercentage = (good * 100) / (good + neutral + bad);
+    const value = calcGoodPercentage.toFixed(1);
+    var pointNum = parseFloat(value);
+    return pointNum;
+  };
+
+  const calcAverage = () => {
+    const negative = Math.abs(bad) * -1;
+    const average = (good - bad + 0 + negative) / 3;
+    return average;
+  };
+
   return (
     <>
       <div>
@@ -27,10 +58,13 @@ const App = () => {
         <button onClick={() => handleBad(bad)}>Huono</button>
       </div>
       <div>
-        <h2>Statistiikka</h2>
-        <p>Hyvä {good}</p>
-        <p>Neutraali {neutral}</p>
-        <p>Huono {bad}</p>
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          calcAverage={calcAverage}
+          calcPercentage={calcPercentage}
+        />
       </div>
     </>
   );
