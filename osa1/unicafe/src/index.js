@@ -8,12 +8,48 @@ const Statistics = ({ good, neutral, bad, calcAverage, calcPercentage }) => {
 
   return (
     <div>
-      <Statistic value={good}>Hyvä </Statistic>
-      <Statistic value={neutral}>Neutraali </Statistic>
-      <Statistic value={bad}>Huono </Statistic>
-      <Statistic value={good + neutral + bad}>Yhteensä </Statistic>
-      <Statistic value={calcAverage()}>Keskiarvo</Statistic>
-      <Statistic value={`${calcPercentage() || 0} %`}>Positiivisia</Statistic>
+      <table>
+        <tbody>
+          <tr>
+            <td>Hyvä</td>
+            <td>
+              <Statistic value={good} />
+            </td>
+          </tr>
+          <tr>
+            <td>Neutraali</td>
+            <td>
+              <Statistic value={neutral} />
+            </td>
+          </tr>
+          <tr>
+            <td>Huono</td>
+            <td>
+              {' '}
+              <Statistic value={bad} />
+            </td>
+          </tr>
+          <tr>
+            <td>Yhteensä</td>
+            <td>
+              <Statistic value={good + neutral + bad} />{' '}
+            </td>
+          </tr>
+          <tr>
+            <td>Keskiarvo</td>
+            <td>
+              {' '}
+              <Statistic value={calcAverage()} />
+            </td>
+          </tr>
+          <tr>
+            <td>Positiivisia</td>
+            <td>
+              <Statistic value={`${calcPercentage()} %`} />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -22,12 +58,8 @@ const Button = ({ children, onPress }) => {
   return <button onClick={onPress}>{children}</button>;
 };
 
-const Statistic = ({ children, value }) => {
-  return (
-    <p>
-      {children} {value}
-    </p>
-  );
+const Statistic = ({ value }) => {
+  return value;
 };
 
 const App = () => {
