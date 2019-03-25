@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 const Statistics = ({ good, neutral, bad, calcAverage, calcPercentage }) => {
-  if (good === 0 && neutral === 0 && bad === 0) {
-    return <p>Ei yhtään palautetta annettu</p>;
-  }
-
   return (
     <div>
       <table>
@@ -25,20 +21,18 @@ const Statistics = ({ good, neutral, bad, calcAverage, calcPercentage }) => {
           <tr>
             <td>Huono</td>
             <td>
-              {' '}
               <Statistic value={bad} />
             </td>
           </tr>
           <tr>
             <td>Yhteensä</td>
             <td>
-              <Statistic value={good + neutral + bad} />{' '}
+              <Statistic value={good + neutral + bad} />
             </td>
           </tr>
           <tr>
             <td>Keskiarvo</td>
             <td>
-              {' '}
               <Statistic value={calcAverage()} />
             </td>
           </tr>
@@ -58,8 +52,13 @@ const Button = ({ children, onPress }) => {
   return <button onClick={onPress}>{children}</button>;
 };
 
-const Statistic = ({ value }) => {
-  return value;
+const Statistic = ({ label, value }) => {
+  return (
+    <tr>
+      <td>{label}</td>
+      <td>{value}</td>
+    </tr>
+  );
 };
 
 const App = () => {
@@ -67,8 +66,8 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const handleGood = value => {
-    setGood(value + 1);
+  const handleGood = () => {
+    setGood(good + 1);
   };
 
   const handleNeutral = value => {
@@ -96,19 +95,24 @@ const App = () => {
     <>
       <div>
         <h1>Anna palauetta</h1>
-        <Button onPress={() => handleGood(good)}>Hyvä</Button>
+        <Button onPress={handleGood}>Hyvä</Button>
         <Button onPress={() => handleNeutral(neutral)}>Neutraali</Button>
         <Button onPress={() => handleBad(bad)}>Huono</Button>
       </div>
       <div>
         <h2>Statistiikka</h2>
-        <Statistics
-          good={good}
-          neutral={neutral}
-          bad={bad}
-          calcAverage={calcAverage}
-          calcPercentage={calcPercentage}
-        />
+        {good === 0 && neutral === 0 && bad === 0 ? (
+          <p>Ei yhtään palautetta annettu</p>
+        ) : (
+          <Statistics
+            rows={[{ label: 'Hyvä', value: good }, { label: 'Neutral', value: neutral }]}
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            calcAverage={calcAverage}
+            calcPercentage={calcPercentage}
+          />
+        )}
       </div>
     </>
   );

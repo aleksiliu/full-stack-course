@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 const App = props => {
+  const [points, setPoints] = useState([0, 0, 0, 0, 0, 0]);
   const [selected, setSelected] = useState(0);
 
   const setRandom = () => {
@@ -9,11 +10,30 @@ const App = props => {
     setSelected(randomNumber);
   };
 
+  const vote = () => {
+    const copy = [...points];
+    copy[selected] += 1;
+    setPoints(copy);
+  };
+
+  const indexOfMaxValue = points.indexOf(Math.max(...points));
+
   return (
-    <div>
-      <p>{props.anecdotes[selected]}</p>
-      <button onClick={() => setRandom()}>lol</button>
-    </div>
+    <>
+      <div>
+        <p>
+          {props.anecdotes[selected]} has <br />
+          {points[selected]} votes
+        </p>
+        <button onClick={() => vote()}>vote</button>
+        <button onClick={() => setRandom()}>generate</button>
+      </div>
+      <div>
+        <h2>Anecdote with most votes</h2>
+        {props.anecdotes[indexOfMaxValue]}
+        has {Math.max(...points)} votes
+      </div>
+    </>
   );
 };
 
