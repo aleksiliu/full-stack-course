@@ -30,8 +30,14 @@ const App = props => {
       </div>
       <div>
         <h2>Anecdote with most votes</h2>
-        {props.anecdotes[indexOfMaxValue]}
-        has {Math.max(...points)} votes
+        {Math.max(...points) > 0 ? (
+          <p>
+            {props.anecdotes[indexOfMaxValue]}
+            has {Math.max(...points)} votes
+          </p>
+        ) : (
+          <p>Vote Bruh!</p>
+        )}
       </div>
     </>
   );
