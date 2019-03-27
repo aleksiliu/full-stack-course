@@ -1,26 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const Header = props => {
-  return <h1>{props.coursetitle}</h1>;
+const Header = ({ coursetitle }) => {
+  return <h1>{coursetitle}</h1>;
 };
 
-const Part = props => {
+const Part = ({ name, exercises }) => {
   return (
     <p>
-      {props.name} {props.exercises}
+      {name} {exercises}
     </p>
   );
 };
 
-const Total = props => {
-  return <p>yhteensä {props.total.reduce((acc, obj) => acc + obj.exercises, 0)} tehtävää</p>;
+const Total = ({ total }) => {
+  return <p>yhteensä {total.reduce((acc, obj) => acc + obj.exercises, 0)} tehtävää</p>;
 };
 
-const Content = props => {
+const Content = ({ parts }) => {
   return (
     <>
-      {props.parts.map(subitem => (
+      {parts.map(subitem => (
         <Part key={subitem.id} name={subitem.name} exercises={subitem.exercises} />
       ))}
     </>
