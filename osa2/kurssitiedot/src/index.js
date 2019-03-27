@@ -1,30 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const Header = props => {
+  return <h1>{props.coursetitle}</h1>;
+};
+
+const Part = props => {
+  return (
+    <p>
+      {props.name} {props.exercises}
+    </p>
+  );
+};
+
+const Total = props => {
+  return <p>yhteensä {props.total.reduce((acc, obj) => acc + obj.exercises, 0)} tehtävää</p>;
+};
+
 const Content = props => {
-  const listItems = props.courses.map(item => (
+  return (
+    <>
+      {props.parts.map(subitem => (
+        <Part key={subitem.id} name={subitem.name} exercises={subitem.exercises} />
+      ))}
+    </>
+  );
+};
+
+const Course = ({ courses }) => {
+  const listItems = courses.map(item => (
     <div key={item.id}>
-      <h1>{item.name}</h1>
-      {item.parts.map(subitem => {
-        return (
-          <p key={subitem.id}>
-            {subitem.name} {subitem.exercises}
-          </p>
-        );
-      })}
-      <p>yhteensä {item.parts.reduce((acc, obj) => acc + obj.exercises, 0)} tehtävää </p>
+      <Header coursetitle={item.name} />
+      <Content parts={item.parts} />
+      <Total total={item.parts} />
     </div>
   ));
 
   return <div>{listItems}</div>;
-};
-
-const Course = ({ courses }) => {
-  return (
-    <div>
-      <Content courses={courses} />
-    </div>
-  );
 };
 
 const App = () => {
