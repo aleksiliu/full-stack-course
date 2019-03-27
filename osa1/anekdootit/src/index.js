@@ -5,12 +5,12 @@ const App = props => {
   const [points, setPoints] = useState([0, 0, 0, 0, 0, 0]);
   const [selected, setSelected] = useState(0);
 
-  const setRandom = () => {
+  const handleRandom = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length);
     setSelected(randomNumber);
   };
 
-  const vote = () => {
+  const handleVote = () => {
     const copy = [...points];
     copy[selected] += 1;
     setPoints(copy);
@@ -25,14 +25,14 @@ const App = props => {
           {props.anecdotes[selected]} has <br />
           {points[selected]} votes
         </p>
-        <button onClick={() => vote()}>vote</button>
-        <button onClick={() => setRandom()}>generate</button>
+        <button onClick={handleVote}>vote</button>
+        <button onClick={handleRandom}>generate</button>
       </div>
       <div>
         <h2>Anecdote with most votes</h2>
         {Math.max(...points) > 0 ? (
           <p>
-            {props.anecdotes[indexOfMaxValue]}
+            {props.anecdotes[indexOfMaxValue]} <br />
             has {Math.max(...points)} votes
           </p>
         ) : (
