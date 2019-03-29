@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([
+    {
+      name: 'Arto',
+      id: 1
+    },
+    {
+      name: 'Seppo',
+      id: 2
+    }
+  ]);
   const [newName, setNewName] = useState('');
 
   const handleChange = e => {
@@ -14,7 +23,13 @@ const App = () => {
       name: newName,
       id: persons.length + 1
     };
-    setPersons(persons.concat(personObject));
+
+    if (persons.some(e => e.name === newName)) {
+      alert(`${newName} on jo luettelossa`);
+    } else {
+      setPersons(persons.concat(personObject));
+    }
+
     setNewName('');
   };
 
