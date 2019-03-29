@@ -4,33 +4,33 @@ const App = () => {
   const [persons, setPersons] = useState([
     {
       name: 'Arto',
+      phone: '23324',
       id: 1
     },
     {
       name: 'Seppo',
+      phone: '23322133214',
       id: 2
     }
   ]);
   const [newName, setNewName] = useState('');
-
-  const handleChange = e => {
-    setNewName(e.target.value);
-  };
+  const [newPhone, setPhoneNumber] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
-    const personObject = {
-      name: newName,
-      id: persons.length + 1
-    };
 
-    if (persons.some(e => e.name === newName)) {
-      alert(`${newName} on jo luettelossa`);
+    if (persons.some(person => person.name.toUpperCase() === newName.toUpperCase())) {
+      alert(`${newName.charAt(0).toUpperCase() + newName.slice(1)} on jo luettelossa`);
     } else {
+      const personObject = {
+        name: newName,
+        phone: newPhone,
+        id: persons.length + 1
+      };
       setPersons(persons.concat(personObject));
+      setNewName('');
+      setPhoneNumber('');
     }
-
-    setNewName('');
   };
 
   return (
@@ -38,7 +38,8 @@ const App = () => {
       <h2>Puhelinluettelo</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          nimi: <input value={newName} onChange={handleChange} />
+          nimi: <input value={newName} onChange={e => setNewName(e.target.value)} />
+          puhelin: <input value={newPhone} onChange={e => setPhoneNumber(e.target.value)} />
         </div>
         <div>
           <button type="submit">lisää</button>
@@ -47,7 +48,9 @@ const App = () => {
       <h2>Numerot</h2>
       <div>
         {persons.map(person => (
-          <p key={person.id}>{person.name}</p>
+          <p key={person.id}>
+            {person.name} {person.phone}
+          </p>
         ))}
       </div>
     </div>
