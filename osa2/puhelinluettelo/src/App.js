@@ -15,6 +15,7 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState('');
   const [newPhone, setPhoneNumber] = useState('');
+  const [filterString, setFilterString] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -36,7 +37,12 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <div>
+        rajaa näytettäviä nimellä:{' '}
+        <input value={filterString} onChange={e => setFilterString(e.target.value)} />
+      </div>
       <form onSubmit={handleSubmit}>
+        <h2>Lisää uusi</h2>
         <div>
           nimi: <input value={newName} onChange={e => setNewName(e.target.value)} />
           puhelin: <input value={newPhone} onChange={e => setPhoneNumber(e.target.value)} />
@@ -47,11 +53,13 @@ const App = () => {
       </form>
       <h2>Numerot</h2>
       <div>
-        {persons.map(person => (
-          <p key={person.id}>
-            {person.name} {person.phone}
-          </p>
-        ))}
+        {persons
+          .filter(x => x.name.toLowerCase().includes(filterString.toLowerCase()))
+          .map(person => (
+            <p key={person.id}>
+              {person.name} {person.phone}
+            </p>
+          ))}
       </div>
     </div>
   );
