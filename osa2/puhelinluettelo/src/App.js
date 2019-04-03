@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      name: 'Arto',
-      phone: '23324',
-      id: 1
-    },
-    {
-      name: 'Seppo',
-      phone: '23322133214',
-      id: 2
-    }
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setPhoneNumber] = useState('');
   const [filterString, setFilterString] = useState('');
 
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then(response => {
+      setPersons(response.data);
+    });
+  }, []);
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (persons.some(person => person.name.toUpperCase() === newName.toUpperCase())) {
+    if (persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
       alert(`${newName.charAt(0).toUpperCase() + newName.slice(1)} on jo luettelossa`);
     } else {
       const personObject = {
         name: newName,
-        phone: newPhone,
+        number: newPhone,
         id: persons.length + 1
       };
       setPersons(persons.concat(personObject));
@@ -54,10 +50,10 @@ const App = () => {
       <h2>Numerot</h2>
       <div>
         {persons
-          .filter(x => x.name.toLowerCase().includes(filterString.toLowerCase()))
+          .filter(person => person.name.toLowerCase().includes(filterString.toLowerCase()))
           .map(person => (
             <p key={person.id}>
-              {person.name} {person.phone}
+              {person.name} {person.number}
             </p>
           ))}
       </div>
