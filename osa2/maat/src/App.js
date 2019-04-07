@@ -8,14 +8,14 @@ const App = () => {
   useEffect(
     () => {
       const fetchData = async () => {
-        const result = await axios(`https://restcountries.eu/rest/v2/name/${country}`);
+        const result = await axios('https://restcountries.eu/rest/v2/all');
 
         setCountries(result.data);
       };
 
       fetchData();
     },
-    [country],
+    [],
     console.log(countries)
   );
 
@@ -24,9 +24,11 @@ const App = () => {
       <h2>Maat</h2>
       <input type="text" value={country} onChange={e => setCountry(e.target.value)} />
       <div>
-        {countries.map(country => (
-          <p key={country.numericCode}>{country.name}</p>
-        ))}
+        {countries
+          .filter(person => person.name.toLowerCase().includes(country.toLowerCase()))
+          .map(country => (
+            <p key={country.numericCode}>{country.name}</p>
+          ))}
       </div>
     </div>
   );
