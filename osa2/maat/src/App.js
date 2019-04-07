@@ -7,7 +7,7 @@ const App = () => {
 
   const CountryList = () => {
     if (countries.length > 10) {
-      return <p> Too many options</p>;
+      return <p> Too many options to show</p>;
     } else if (countries.length === 1) {
       return (
         <div>
@@ -42,28 +42,20 @@ const App = () => {
     }
   };
 
-  useEffect(
-    () => {
-      const fetchData = async () => {
-        const result = await axios('https://restcountries.eu/rest/v2/all');
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios('https://restcountries.eu/rest/v2/all');
 
-        setCountries(result.data.filter(x => x.name.toLowerCase().includes(country.toLowerCase())));
-      };
+      setCountries(result.data.filter(x => x.name.toLowerCase().includes(country.toLowerCase())));
+    };
 
-      fetchData();
-    },
-    [country],
-    console.log(countries)
-  );
-
-  const handleChange = event => {
-    setCountry(event.target.value);
-  };
+    fetchData();
+  }, [country]);
 
   return (
     <div>
       <h2>Maat</h2>
-      <input type="text" value={country} onChange={handleChange} />
+      <input type="text" value={country} onChange={event => setCountry(event.target.value)} />
       <div>
         <CountryList />
       </div>
