@@ -48,20 +48,33 @@ const App = () => {
     () => {
       const fetchData = async () => {
         const result = await axios('https://restcountries.eu/rest/v2/all');
-
-        setCountries(result.data.filter(x => x.name.toLowerCase().includes(country.toLowerCase())));
+        setCountries(result.data);
       };
 
       fetchData();
     },
-    [country],
+    [],
     console.log(countries)
   );
+
+  const filterNames = inputValue => {
+    const lol = countries;
+    const newArray = lol.filter(country =>
+      country.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setCountries(newArray);
+  };
+
+  const handleChange = e => {
+    const inputValue = e.target.value;
+    setCountry(inputValue);
+    filterNames(inputValue);
+  };
 
   return (
     <div>
       <h2>Maat</h2>
-      <input type="text" value={country} onChange={event => setCountry(event.target.value)} />
+      <input type="text" value={country} onChange={handleChange} />
       <div>
         <CountryList />
       </div>
