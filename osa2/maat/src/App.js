@@ -31,6 +31,8 @@ const App = () => {
           ))}
         </div>
       );
+    } else if (countries.length === 0) {
+      return <p> Nothing found</p>;
     } else {
       return (
         <div>
@@ -42,15 +44,19 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios('https://restcountries.eu/rest/v2/all');
+  useEffect(
+    () => {
+      const fetchData = async () => {
+        const result = await axios('https://restcountries.eu/rest/v2/all');
 
-      setCountries(result.data.filter(x => x.name.toLowerCase().includes(country.toLowerCase())));
-    };
+        setCountries(result.data.filter(x => x.name.toLowerCase().includes(country.toLowerCase())));
+      };
 
-    fetchData();
-  }, [country]);
+      fetchData();
+    },
+    [country],
+    console.log(countries)
+  );
 
   return (
     <div>
