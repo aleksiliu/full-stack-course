@@ -44,22 +44,17 @@ const App = () => {
     }
   };
 
-  useEffect(
-    () => {
-      const fetchData = async () => {
-        const result = await axios('https://restcountries.eu/rest/v2/all');
-        setCountries(result.data);
-      };
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios('https://restcountries.eu/rest/v2/all');
+      setCountries(result.data);
+    };
 
-      fetchData();
-    },
-    [],
-    console.log(countries)
-  );
+    fetchData();
+  }, []);
 
-  const filterNames = inputValue => {
-    const lol = countries;
-    const newArray = lol.filter(country =>
+  const filterCountries = inputValue => {
+    const newArray = countries.filter(country =>
       country.name.toLowerCase().includes(inputValue.toLowerCase())
     );
     setCountries(newArray);
@@ -68,7 +63,7 @@ const App = () => {
   const handleChange = e => {
     const inputValue = e.target.value;
     setCountry(inputValue);
-    filterNames(inputValue);
+    filterCountries(inputValue);
   };
 
   return (
