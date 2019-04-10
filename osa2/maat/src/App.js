@@ -22,7 +22,7 @@ const App = () => {
       return null;
     }
     if (filteredCountries.length > 10) {
-      return <p>Too many matches</p>;
+      return <p>Too many matches. Try again</p>;
     } else if (filteredCountries.length === 1) {
       return (
         <div>
@@ -60,7 +60,12 @@ const App = () => {
   return (
     <div>
       <h2>Maat</h2>
-      <input type="text" value={country} onChange={e => setCountry(e.target.value)} />
+      <input
+        type="text"
+        placeholder="search for country"
+        value={country}
+        onChange={e => setCountry(e.target.value)}
+      />
       <List />
     </div>
   );
