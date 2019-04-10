@@ -17,16 +17,17 @@ const App = () => {
     countryName.name.toLowerCase().includes(country.toLowerCase())
   );
 
-  console.log(filteredCountries);
-
-  return (
-    <div>
-      <h2>Maat</h2>
-      <input type="text" value={country} onChange={e => setCountry(e.target.value)} />
-      <div>
-        {filteredCountries.length === 1 ? (
-          filteredCountries.map(country => (
-            <div key={country.name}>
+  const List = () => {
+    if (filteredCountries.length === 250) {
+      return null;
+    }
+    if (filteredCountries.length > 10) {
+      return <p>Too many matches</p>;
+    } else if (filteredCountries.length === 1) {
+      return (
+        <div>
+          {filteredCountries.map(country => (
+            <div key={country.numericCode}>
               <h2>{country.name}</h2>
               <p> capital {country.population}</p>
               <p> population {country.capital}</p>
@@ -42,15 +43,25 @@ const App = () => {
                 style={{ width: 200, height: 200, marginTop: 20 }}
               />
             </div>
-          ))
-        ) : (
-          <div>
-            {filteredCountries.map(country => (
-              <p key={country.numericCode}>{country.name}</p>
-            ))}
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          {filteredCountries.map(country => (
+            <p key={country.numericCode}>{country.name}</p>
+          ))}
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div>
+      <h2>Maat</h2>
+      <input type="text" value={country} onChange={e => setCountry(e.target.value)} />
+      <List />
     </div>
   );
 };
