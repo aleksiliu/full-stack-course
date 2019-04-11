@@ -4,6 +4,8 @@ import axios from 'axios';
 const App = () => {
   const [country, setCountry] = useState('');
   const [countries, setCountries] = useState([]);
+  const [weatherLocation, setWeatherLocation] = useState('');
+  const [weatherData, setWeatherData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -12,6 +14,18 @@ const App = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (weatherLocation) {
+      const fetchDataa = async () => {
+        const result = await axios(
+          `http://api.apixu.com/v1/current.json?key=5401139303d34fad9ac202237190904&q=${weatherLocation}`
+        );
+        setWeatherData(result.data);
+      };
+      fetchDataa();
+    }
+  }, [weatherLocation]);
 
   const filteredCountries = countries.filter(countryName =>
     countryName.name.toLowerCase().includes(country.toLowerCase())
@@ -42,8 +56,15 @@ const App = () => {
                 alt={country.flag}
                 style={{ width: 200, height: 200, marginTop: 20 }}
               />
+              {setWeatherLocation(country.capital)}
             </div>
           ))}
+          {weatherData.current ? (
+            <div>
+              <h2>Weather in {weatherLocation}</h2>
+              <p>temperature: {weatherData.current.temp_c} celcius</p>
+            </div>
+          ) : null}
         </div>
       );
     } else {
