@@ -17,13 +17,13 @@ const App = () => {
 
   useEffect(() => {
     if (weatherLocation) {
-      const fetchDataa = async () => {
+      const fetchWeahterData = async () => {
         const result = await axios(
           `http://api.apixu.com/v1/current.json?key=5401139303d34fad9ac202237190904&q=${weatherLocation}`
         );
         setWeatherData(result.data);
       };
-      fetchDataa();
+      fetchWeahterData();
     }
   }, [weatherLocation]);
 
