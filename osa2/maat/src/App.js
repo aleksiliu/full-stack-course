@@ -54,7 +54,7 @@ const App = () => {
               <img
                 src={country.flag}
                 alt={country.flag}
-                style={{ width: 200, height: 200, marginTop: 20 }}
+                style={{ width: 200, height: 150, marginTop: 20 }}
               />
               {setWeatherLocation(country.capital)}
             </div>
@@ -63,6 +63,14 @@ const App = () => {
             <div>
               <h2>Weather in {weatherLocation}</h2>
               <p>temperature: {weatherData.current.temp_c} celcius</p>
+              <img
+                src={weatherData.current.condition.icon}
+                alt={weatherData.current.condition.icon}
+                style={{ width: 100, height: 100 }}
+              />
+              <p>
+                wind: {weatherData.current.wind_kph} kph direction {weatherData.current.wind_dir}{' '}
+              </p>
             </div>
           ) : null}
         </div>
