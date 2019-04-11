@@ -18,13 +18,13 @@ const App = () => {
   );
 
   const List = () => {
-    if (filteredCountries.length === 250) {
+    let listOfCountries;
+    if (filteredCountries.length >= 250) {
       return null;
-    }
-    if (filteredCountries.length > 10) {
-      return <p>Too many matches. Try again</p>;
+    } else if (filteredCountries.length > 10) {
+      listOfCountries = <p>Too many matches. Try again</p>;
     } else if (filteredCountries.length === 1) {
-      return (
+      listOfCountries = (
         <div>
           {filteredCountries.map(country => (
             <div key={country.numericCode}>
@@ -47,7 +47,7 @@ const App = () => {
         </div>
       );
     } else {
-      return (
+      listOfCountries = (
         <div>
           {filteredCountries.map(country => (
             <p key={country.numericCode}>{country.name}</p>
@@ -55,6 +55,8 @@ const App = () => {
         </div>
       );
     }
+
+    return listOfCountries;
   };
 
   return (
