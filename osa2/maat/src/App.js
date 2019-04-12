@@ -31,6 +31,14 @@ const App = () => {
     countryName.name.toLowerCase().includes(country.toLowerCase())
   );
 
+  const handleClick = city => {
+    const singleCountry = countries.filter(
+      countryName => countryName.name.toLowerCase() === city.toLowerCase()
+    );
+
+    console.log(singleCountry, city);
+  };
+
   const List = () => {
     let listOfCountries;
     if (filteredCountries.length >= 250) {
@@ -79,7 +87,11 @@ const App = () => {
       listOfCountries = (
         <div>
           {filteredCountries.map(country => (
-            <p key={country.numericCode}>{country.name}</p>
+            <div key={country.numericCode}>
+              <p>{country.name}</p>
+
+              <button onClick={() => handleClick(country.name)}>show more</button>
+            </div>
           ))}
         </div>
       );
