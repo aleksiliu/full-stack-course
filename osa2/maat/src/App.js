@@ -46,7 +46,7 @@ const App = () => {
     setModalIsOpen(false);
   };
 
-  const List = () => {
+  const renderCountries = () => {
     let listOfCountries;
     if (filteredCountries.length >= 250) {
       return null;
@@ -116,7 +116,7 @@ const App = () => {
         value={country}
         onChange={e => setCountry(e.target.value)}
       />
-      <List />
+      {renderCountries()}
       <Modal isOpen={modalIsOpen}>
         <button onClick={closeModal}>close</button>
         <div>
