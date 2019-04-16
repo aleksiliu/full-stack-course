@@ -8,7 +8,7 @@ const App = () => {
   const [weatherLocation, setWeatherLocation] = useState('');
   const [weatherData, setWeatherData] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedData, setSelectedData] = useState(undefined);
+  const [selectedCountry, setSelectedCountry] = useState(undefined);
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -39,8 +39,7 @@ const App = () => {
     const singleCountry = countries.filter(
       countryName => countryName.name.toLowerCase() === city.toLowerCase()
     );
-    setSelectedData(singleCountry);
-    console.log(selectedData);
+    setSelectedCountry(singleCountry);
   };
 
   const closeModal = () => {
@@ -121,20 +120,20 @@ const App = () => {
       <Modal isOpen={modalIsOpen}>
         <button onClick={closeModal}>close</button>
         <div>
-          {selectedData && (
+          {selectedCountry && (
             <div>
-              <h2>{selectedData[0].name}</h2>
-              <p> capital {selectedData[0].capital}</p>
+              <h2>{selectedCountry[0].name}</h2>
+              <p> capital {selectedCountry[0].capital}</p>
               <p> population {country.population}</p>
               <h3>languages</h3>
               <>
-                {selectedData[0].languages.map(country => (
+                {selectedCountry[0].languages.map(country => (
                   <li key={country.name}>{country.name}</li>
                 ))}
               </>
               <img
-                src={selectedData[0].flag}
-                alt={selectedData[0].flag}
+                src={selectedCountry[0].flag}
+                alt={selectedCountry[0].flag}
                 style={{ width: 200, height: 150, marginTop: 20 }}
               />
             </div>
