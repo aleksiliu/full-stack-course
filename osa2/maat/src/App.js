@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
 
 const App = () => {
   const [country, setCountry] = useState('');
   const [countries, setCountries] = useState([]);
   const [weatherLocation, setWeatherLocation] = useState('');
   const [weatherData, setWeatherData] = useState({});
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState(undefined);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCountryData = async () => {
       const result = await axios('https://restcountries.eu/rest/v2/all');
       setCountries(result.data);
     };
-    fetchData();
+    fetchCountryData();
   }, []);
 
   useEffect(() => {
@@ -31,12 +34,17 @@ const App = () => {
     countryName.name.toLowerCase().includes(country.toLowerCase())
   );
 
-  const handleClick = city => {
+  const openModal = city => {
+    setModalIsOpen(true);
     const singleCountry = countries.filter(
       countryName => countryName.name.toLowerCase() === city.toLowerCase()
     );
+    setSelectedData(singleCountry);
+    console.log(selectedData);
+  };
 
-    console.log(singleCountry, city);
+  const closeModal = () => {
+    setModalIsOpen(false);
   };
 
   const List = () => {
@@ -90,7 +98,7 @@ const App = () => {
             <div key={country.numericCode}>
               <p>{country.name}</p>
 
-              <button onClick={() => handleClick(country.name)}>show more</button>
+              <button onClick={() => openModal(country.name)}>show more</button>
             </div>
           ))}
         </div>
@@ -110,6 +118,29 @@ const App = () => {
         onChange={e => setCountry(e.target.value)}
       />
       <List />
+      <Modal isOpen={modalIsOpen}>
+        <button onClick={closeModal}>close</button>
+        <div>
+          {selectedData && (
+            <div>
+              <h2>{selectedData[0].name}</h2>
+              <p> capital {selectedData[0].capital}</p>
+              <p> population {country.population}</p>
+              <h3>languages</h3>
+              <>
+                {selectedData[0].languages.map(country => (
+                  <li key={country.name}>{country.name}</li>
+                ))}
+              </>
+              <img
+                src={selectedData[0].flag}
+                alt={selectedData[0].flag}
+                style={{ width: 200, height: 150, marginTop: 20 }}
+              />
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };
