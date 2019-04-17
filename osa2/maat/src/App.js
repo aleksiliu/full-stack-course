@@ -19,8 +19,8 @@ const Country = ({ country }) => {
   return (
     <div key={country.name}>
       <h2>{country.name}</h2>
-      <p> capital {country.population}</p>
-      <p> population {country.capital}</p>
+      <p> capital {country.capital} </p>
+      <p> population {country.population}</p>
       <h3>languages</h3>
       <>
         {country.languages.map(country => (
@@ -62,7 +62,7 @@ const CountryList = ({ country, handleClick }) => {
 };
 
 const App = () => {
-  const [country, setCountry] = useState('');
+  const [countryToFilter, setCountryToFilter] = useState('');
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const App = () => {
   }, []);
 
   const filteredCountries = countries.filter(countryName =>
-    countryName.name.toLowerCase().includes(country.toLowerCase())
+    countryName.name.toLowerCase().includes(countryToFilter.toLowerCase())
   );
 
   const renderCountries = () => {
@@ -90,11 +90,10 @@ const App = () => {
         <CountryList
           country={country.name}
           key={country.name}
-          handleClick={() => setCountry(country.name)}
+          handleClick={() => setCountryToFilter(country.name)}
         />
       ));
     }
-
     return listOfCountries;
   };
 
@@ -104,8 +103,8 @@ const App = () => {
       <input
         type="text"
         placeholder="search for country"
-        value={country}
-        onChange={e => setCountry(e.target.value)}
+        value={countryToFilter}
+        onChange={e => setCountryToFilter(e.target.value)}
       />
       {renderCountries()}
     </div>
