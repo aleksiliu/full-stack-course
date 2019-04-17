@@ -1,14 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Modal from 'react-modal';
+
+const Country = ({ country }) => {
+  const [weatherData, setWeatherData] = useState({});
+
+  useEffect(() => {
+    const fetchWeahterData = async () => {
+      const result = await axios(
+        `http://api.apixu.com/v1/current.json?key=5401139303d34fad9ac202237190904&q=${
+          country.capital
+        }`
+      );
+      setWeatherData(result.data);
+    };
+    fetchWeahterData();
+  }, []);
+
+  return (
+    <div key={country.name}>
+      <h2>{country.name}</h2>
+      <p> capital {country.population}</p>
+      <p> population {country.capital}</p>
+      <h3>languages</h3>
+      <>
+        {country.languages.map(country => (
+          <li key={country.name}>{country.name}</li>
+        ))}
+      </>
+      <img
+        src={country.flag}
+        alt={country.flag}
+        style={{ width: 200, height: 150, marginTop: 20 }}
+      />
+      <h2>Weather in {country.capital}</h2>
+      {weatherData.current ? (
+        <div>
+          <p>temperature: {weatherData.current.temp_c} celcius</p>
+          <img
+            src={weatherData.current.condition.icon}
+            alt={weatherData.current.condition.icon}
+            style={{ width: 100, height: 100 }}
+          />
+          <p>
+            wind: {weatherData.current.wind_kph} kph direction {weatherData.current.wind_dir}{' '}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
+const CountryList = ({ country, handleClick }) => {
+  return (
+    <>
+      <div key={country}>
+        <p>{country}</p>
+        <button onClick={handleClick}>show more</button>
+      </div>
+    </>
+  );
+};
 
 const App = () => {
   const [country, setCountry] = useState('');
   const [countries, setCountries] = useState([]);
-  const [weatherLocation, setWeatherLocation] = useState('');
-  const [weatherData, setWeatherData] = useState({});
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(undefined);
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -18,33 +73,9 @@ const App = () => {
     fetchCountryData();
   }, []);
 
-  useEffect(() => {
-    if (weatherLocation) {
-      const fetchWeahterData = async () => {
-        const result = await axios(
-          `http://api.apixu.com/v1/current.json?key=5401139303d34fad9ac202237190904&q=${weatherLocation}`
-        );
-        setWeatherData(result.data);
-      };
-      fetchWeahterData();
-    }
-  }, [weatherLocation]);
-
   const filteredCountries = countries.filter(countryName =>
     countryName.name.toLowerCase().includes(country.toLowerCase())
   );
-
-  const openModal = city => {
-    setModalIsOpen(true);
-    const singleCountry = countries.filter(
-      countryName => countryName.name.toLowerCase() === city.toLowerCase()
-    );
-    setSelectedCountry(singleCountry);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
 
   const renderCountries = () => {
     let listOfCountries;
@@ -53,55 +84,11 @@ const App = () => {
     } else if (filteredCountries.length > 10) {
       listOfCountries = <p>Too many matches. Try again</p>;
     } else if (filteredCountries.length === 1) {
-      listOfCountries = (
-        <div>
-          {filteredCountries.map(country => (
-            <div key={country.numericCode}>
-              <h2>{country.name}</h2>
-              <p> capital {country.population}</p>
-              <p> population {country.capital}</p>
-              <h3>languages</h3>
-              <>
-                {country.languages.map(country => (
-                  <li key={country.name}>{country.name}</li>
-                ))}
-              </>
-              <img
-                src={country.flag}
-                alt={country.flag}
-                style={{ width: 200, height: 150, marginTop: 20 }}
-              />
-              {setWeatherLocation(country.capital)}
-            </div>
-          ))}
-          {weatherData.current ? (
-            <div>
-              <h2>Weather in {weatherLocation}</h2>
-              <p>temperature: {weatherData.current.temp_c} celcius</p>
-              <img
-                src={weatherData.current.condition.icon}
-                alt={weatherData.current.condition.icon}
-                style={{ width: 100, height: 100 }}
-              />
-              <p>
-                wind: {weatherData.current.wind_kph} kph direction {weatherData.current.wind_dir}{' '}
-              </p>
-            </div>
-          ) : null}
-        </div>
-      );
+      listOfCountries = <Country country={filteredCountries[0]} />;
     } else {
-      listOfCountries = (
-        <div>
-          {filteredCountries.map(country => (
-            <div key={country.numericCode}>
-              <p>{country.name}</p>
-
-              <button onClick={() => openModal(country.name)}>show more</button>
-            </div>
-          ))}
-        </div>
-      );
+      listOfCountries = filteredCountries.map(country => (
+        <CountryList country={country.name} handleClick={() => setCountry(country.name)} />
+      ));
     }
 
     return listOfCountries;
@@ -117,29 +104,6 @@ const App = () => {
         onChange={e => setCountry(e.target.value)}
       />
       {renderCountries()}
-      <Modal isOpen={modalIsOpen}>
-        <button onClick={closeModal}>close</button>
-        <div>
-          {selectedCountry && (
-            <div>
-              <h2>{selectedCountry[0].name}</h2>
-              <p> capital {selectedCountry[0].capital}</p>
-              <p> population {country.population}</p>
-              <h3>languages</h3>
-              <>
-                {selectedCountry[0].languages.map(country => (
-                  <li key={country.name}>{country.name}</li>
-                ))}
-              </>
-              <img
-                src={selectedCountry[0].flag}
-                alt={selectedCountry[0].flag}
-                style={{ width: 200, height: 150, marginTop: 20 }}
-              />
-            </div>
-          )}
-        </div>
-      </Modal>
     </div>
   );
 };
