@@ -53,7 +53,7 @@ const Country = ({ country }) => {
 const CountryList = ({ country, handleClick }) => {
   return (
     <>
-      <div key={country}>
+      <div>
         <p>{country}</p>
         <button onClick={handleClick}>show more</button>
       </div>
@@ -87,7 +87,11 @@ const App = () => {
       listOfCountries = <Country country={filteredCountries[0]} />;
     } else {
       listOfCountries = filteredCountries.map(country => (
-        <CountryList country={country.name} handleClick={() => setCountry(country.name)} />
+        <CountryList
+          country={country.name}
+          key={country.name}
+          handleClick={() => setCountry(country.name)}
+        />
       ));
     }
 
