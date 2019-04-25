@@ -24,9 +24,28 @@ const App = () => {
         number: newPhone,
         id: persons.length + 1
       };
-      setPersons(persons.concat(personObject));
-      setNewName('');
-      setPhoneNumber('');
+      axios.post('http://localhost:3001/persons', personObject).then(response => {
+        setPersons(persons.concat(response.data));
+        setNewName('');
+        setPhoneNumber('');
+      });
+    }
+  };
+
+  const removeContact = id => {
+    const singlePerson = persons.find(person => person.id === id);
+
+    const result = window.confirm(
+      `Oletko varma että haluat poistaa henkilön ${singlePerson.name}?`
+    );
+
+    if (result) {
+      const url = `http://localhost:3001/persons/${id}`;
+
+      axios.delete(url).then(response => {
+        console.log(response);
+        setPersons(persons.filter(note => note.id !== id));
+      });
     }
   };
 
@@ -54,6 +73,7 @@ const App = () => {
           .map(person => (
             <p key={person.id}>
               {person.name} {person.number}
+              <button onClick={() => removeContact(person.id)}>remove</button>
             </p>
           ))}
       </div>

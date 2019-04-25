@@ -50,7 +50,7 @@ const Country = ({ country }) => {
   );
 };
 
-const CountryList = ({ country, handleClick }) => {
+const CountryListItem = ({ country, handleClick }) => {
   return (
     <>
       <div>
@@ -79,7 +79,7 @@ const App = () => {
 
   const renderCountries = () => {
     let listOfCountries;
-    if (filteredCountries.length >= 250) {
+    if (countryToFilter === '') {
       return null;
     } else if (filteredCountries.length > 10) {
       listOfCountries = <p>Too many matches. Try again</p>;
@@ -87,7 +87,7 @@ const App = () => {
       listOfCountries = <Country country={filteredCountries[0]} />;
     } else {
       listOfCountries = filteredCountries.map(country => (
-        <CountryList
+        <CountryListItem
           country={country.name}
           key={country.name}
           handleClick={() => setCountryToFilter(country.name)}
