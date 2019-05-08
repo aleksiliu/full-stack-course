@@ -26,7 +26,6 @@ const App = () => {
 
         const url = `http://localhost:3001/persons/${name.id}`;
 
-        //find the index of object from array that you want to update
         const objIndex = persons.findIndex(obj => obj.name === newName);
 
         const updatedObj = { ...persons[objIndex], number: newPhone };
