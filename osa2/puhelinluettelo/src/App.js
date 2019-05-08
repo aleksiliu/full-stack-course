@@ -17,7 +17,31 @@ const App = () => {
     e.preventDefault();
 
     if (persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
-      alert(`${newName.charAt(0).toUpperCase() + newName.slice(1)} on jo luettelossa`);
+      const result = window.confirm(
+        `${newName.charAt(0).toUpperCase() +
+          newName.slice(1)} on jo luettelossa. Haluatko korvata vanhan numeron uudella?`
+      );
+      if (result) {
+        const name = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
+
+        const url = `http://localhost:3001/persons/${name.id}`;
+
+        //find the index of object from array that you want to update
+        const objIndex = persons.findIndex(obj => obj.name === newName);
+
+        const updatedObj = { ...persons[objIndex], number: newPhone };
+
+        axios.put(url, updatedObj).then(response => {
+          const updatedPersons = [
+            ...persons.slice(0, objIndex),
+            response.data,
+            ...persons.slice(objIndex + 1)
+          ];
+          setPersons(updatedPersons);
+          setNewName('');
+          setPhoneNumber('');
+        });
+      }
     } else {
       const personObject = {
         name: newName,
