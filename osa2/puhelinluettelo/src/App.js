@@ -58,13 +58,13 @@ const App = () => {
             setPhoneNumber('');
           })
           .catch(error => {
-            setNotificationMessage(`muistiinpano on jo valitettavasti poistettu palvelimelta`);
+            setNotificationMessage(`${newName} on jo valitettavasti poistettu palvelimelta`);
             setTimeout(() => {
               setNotificationMessage(null);
             }, 2000);
             setNewName('');
             setPhoneNumber('');
-            setPersons(persons.filter(note => note.id !== updatedObj.id));
+            setPersons(persons.filter(person => person.id !== updatedObj.id));
           });
       }
     } else {
@@ -102,7 +102,7 @@ const App = () => {
       axios
         .delete(url)
         .then(response => {
-          setPersons(persons.filter(note => note.id !== id));
+          setPersons(persons.filter(person => person.id !== id));
           setNotificationMessage(
             `${singlePerson.name} poistettu numerolla ${singlePerson.number} `
           );
