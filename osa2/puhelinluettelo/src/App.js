@@ -40,39 +40,52 @@ const App = () => {
 
         const updatedObj = { ...persons[objIndex], number: newPhone };
 
-        console.log(updatedObj);
+        axios
+          .put(url, updatedObj)
+          .then(response => {
+            const updatedPersons = [
+              ...persons.slice(0, objIndex),
+              response.data,
+              ...persons.slice(objIndex + 1)
+            ];
 
-        axios.put(url, updatedObj).then(response => {
-          const updatedPersons = [
-            ...persons.slice(0, objIndex),
-            response.data,
-            ...persons.slice(objIndex + 1)
-          ];
-          console.log(updatedPersons);
-          setPersons(updatedPersons);
-          setNotificationMessage(`${newName} numero muutettu muotoon ${newPhone} `);
-          setTimeout(() => {
-            setNotificationMessage(null);
-          }, 2000);
-          setNewName('');
-          setPhoneNumber('');
-        });
+            setPersons(updatedPersons);
+            setNotificationMessage(`${newName} numero muutettu muotoon ${newPhone} `);
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 2000);
+            setNewName('');
+            setPhoneNumber('');
+          })
+          .catch(error => {
+            setNotificationMessage(`muistiinpano on jo valitettavasti poistettu palvelimelta`);
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 2000);
+            setNewName('');
+            setPhoneNumber('');
+            setPersons(persons.filter(note => note.id !== updatedObj.id));
+          });
       }
     } else {
       const personObject = {
         name: newName,
-        number: newPhone,
-        id: persons.length + 1
+        number: newPhone
       };
-      axios.post('http://localhost:3001/persons', personObject).then(response => {
-        setPersons(persons.concat(response.data));
-        setNewName('');
-        setPhoneNumber('');
-        setNotificationMessage(`${newName} lisätty`);
-        setTimeout(() => {
-          setNotificationMessage(null);
-        }, 2000);
-      });
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          setNewName('');
+          setPhoneNumber('');
+          setNotificationMessage(`${newName} lisätty`);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 2000);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
 
@@ -86,13 +99,20 @@ const App = () => {
     if (result) {
       const url = `http://localhost:3001/persons/${id}`;
 
-      axios.delete(url).then(response => {
-        setPersons(persons.filter(note => note.id !== id));
-        setNotificationMessage(`${singlePerson.name} poistettu numerolla ${singlePerson.number} `);
-        setTimeout(() => {
-          setNotificationMessage(null);
-        }, 2000);
-      });
+      axios
+        .delete(url)
+        .then(response => {
+          setPersons(persons.filter(note => note.id !== id));
+          setNotificationMessage(
+            `${singlePerson.name} poistettu numerolla ${singlePerson.number} `
+          );
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 2000);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
 
