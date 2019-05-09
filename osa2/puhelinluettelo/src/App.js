@@ -88,7 +88,7 @@ const App = () => {
 
       axios.delete(url).then(response => {
         setPersons(persons.filter(note => note.id !== id));
-        setNotificationMessage(`${singlePerson.name} poistettu`);
+        setNotificationMessage(`${singlePerson.name} poistettu numerolla ${singlePerson.number} `);
         setTimeout(() => {
           setNotificationMessage(null);
         }, 2000);
