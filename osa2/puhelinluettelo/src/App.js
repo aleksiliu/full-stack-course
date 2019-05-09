@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './index.css';
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return <div className="notification">{message}</div>;
+};
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setPhoneNumber] = useState('');
   const [filterString, setFilterString] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:3001/persons').then(response => {
@@ -30,13 +40,20 @@ const App = () => {
 
         const updatedObj = { ...persons[objIndex], number: newPhone };
 
+        console.log(updatedObj);
+
         axios.put(url, updatedObj).then(response => {
           const updatedPersons = [
             ...persons.slice(0, objIndex),
             response.data,
             ...persons.slice(objIndex + 1)
           ];
+          console.log(updatedPersons);
           setPersons(updatedPersons);
+          setNotificationMessage(`${newName} numero muutettu muotoon ${newPhone} `);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 2000);
           setNewName('');
           setPhoneNumber('');
         });
@@ -51,6 +68,10 @@ const App = () => {
         setPersons(persons.concat(response.data));
         setNewName('');
         setPhoneNumber('');
+        setNotificationMessage(`${newName} lisätty`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 2000);
       });
     }
   };
@@ -66,14 +87,18 @@ const App = () => {
       const url = `http://localhost:3001/persons/${id}`;
 
       axios.delete(url).then(response => {
-        console.log(response);
         setPersons(persons.filter(note => note.id !== id));
+        setNotificationMessage(`${singlePerson.name} poistettu`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 2000);
       });
     }
   };
 
   return (
     <div>
+      {notificationMessage && <Notification message={notificationMessage} />}
       <h2>Puhelinluettelo</h2>
       <div>
         rajaa näytettäviä nimellä:{' '}

@@ -2,18 +2,8 @@
   "persons": [
     {
       "name": "asd",
-      "number": "asd",
+      "number": "435543",
       "id": 1
-    },
-    {
-      "name": "sadasd",
-      "number": "12",
-      "id": 2
-    },
-    {
-      "name": "pekka",
-      "number": "456645",
-      "id": 3
     }
   ]
 }
