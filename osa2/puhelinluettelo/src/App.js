@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './index.css';
+import noteService from './services/persons';
 
 const Notification = ({ message }) => {
   if (message === null) {
@@ -18,8 +19,8 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      setPersons(response.data);
+    noteService.getAll().then(initialPersons => {
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -34,18 +35,16 @@ const App = () => {
       if (result) {
         const name = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
 
-        const url = `http://localhost:3001/persons/${name.id}`;
-
         const objIndex = persons.findIndex(obj => obj.name === newName);
 
         const updatedObj = { ...persons[objIndex], number: newPhone };
 
-        axios
-          .put(url, updatedObj)
-          .then(response => {
+        noteService
+          .update(name.id, updatedObj)
+          .then(returnedPerson => {
             const updatedPersons = [
               ...persons.slice(0, objIndex),
-              response.data,
+              returnedPerson,
               ...persons.slice(objIndex + 1)
             ];
 
@@ -72,10 +71,10 @@ const App = () => {
         name: newName,
         number: newPhone
       };
-      axios
-        .post('http://localhost:3001/persons', personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data));
+      noteService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
           setNewName('');
           setPhoneNumber('');
           setNotificationMessage(`${newName} lisätty`);
@@ -97,10 +96,8 @@ const App = () => {
     );
 
     if (result) {
-      const url = `http://localhost:3001/persons/${id}`;
-
-      axios
-        .delete(url)
+      noteService
+        .remove(id)
         .then(response => {
           setPersons(persons.filter(person => person.id !== id));
           setNotificationMessage(
