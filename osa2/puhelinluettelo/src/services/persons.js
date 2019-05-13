@@ -17,7 +17,7 @@ const update = (id, newObject) => {
 };
 
 const remove = id => {
-  const request = axios.delete(`http://localhost:3001/persons/${id}`);
+  const request = axios.delete(`${baseUrl}/${id}`);
   return request.then(response => response.data);
 };
 

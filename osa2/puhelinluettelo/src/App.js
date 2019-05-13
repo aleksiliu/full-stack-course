@@ -51,15 +51,16 @@ const App = () => {
             setNotificationMessage(`${newName} numero muutettu muotoon ${newPhone} `);
             setTimeout(() => {
               setNotificationMessage(null);
-            }, 2000);
+            }, 4000);
             setNewName('');
             setPhoneNumber('');
           })
           .catch(error => {
+            console.log(error);
             setNotificationMessage(`${newName} on jo valitettavasti poistettu palvelimelta`);
             setTimeout(() => {
               setNotificationMessage(null);
-            }, 2000);
+            }, 4000);
             setNewName('');
             setPhoneNumber('');
             setPersons(persons.filter(person => person.id !== updatedObj.id));
@@ -131,16 +132,16 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      <div>
+      <ul>
         {persons
           .filter(person => person.name.toLowerCase().includes(filterString.toLowerCase()))
           .map(person => (
-            <p key={person.id}>
+            <li key={person.id}>
               {person.name} {person.number}
               <button onClick={() => removeContact(person.id)}>remove</button>
-            </p>
+            </li>
           ))}
-      </div>
+      </ul>
     </div>
   );
 };
