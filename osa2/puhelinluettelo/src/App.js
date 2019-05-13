@@ -41,12 +41,9 @@ const App = () => {
         noteService
           .update(name.id, updatedObj)
           .then(returnedPerson => {
-            const updatedPersons = [
-              ...persons.slice(0, objIndex),
-              returnedPerson,
-              ...persons.slice(objIndex + 1)
-            ];
-
+            const updatedPersons = persons.map(person =>
+              person.id === returnedPerson.id ? returnedPerson : person
+            );
             setPersons(updatedPersons);
             setNotificationMessage(`${newName} numero muutettu muotoon ${newPhone} `);
             setTimeout(() => {
